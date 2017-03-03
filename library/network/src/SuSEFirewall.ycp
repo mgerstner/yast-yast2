@@ -163,17 +163,6 @@
     // <!-- SuSEFirewall GLOBAL FUNCTIONS USED BY LOCAL ONES //-->
 
     /**
-     * Returns whether records in variable should be written one record on one line.
-     * @return boolean if wolpr
-     */
-    boolean WriteOneRecordPerLine (string key_name) {
-	if (key_name == nil && key_name == "")
-	    return true;
-
-	return (contains (one_line_per_record, key_name));
-    }
-
-    /**
      * Function sets internal variable, which indicates, that any
      * "firewall settings were modified", to "true".
      */
@@ -354,10 +343,6 @@
 	foreach (string variable, variables, {
 	    // if variable is undefined, get default value
 	    value = SETTINGS[variable]:GetDefaultValue(variable);
-
-	    if (WriteOneRecordPerLine (variable) == true) {
-		value = mergestring (splitstring (value, " "), "\n");
-	    }
 
 	    write_status = (boolean) SCR::Write(
 		add(.sysconfig.SuSEfirewall2,variable),
