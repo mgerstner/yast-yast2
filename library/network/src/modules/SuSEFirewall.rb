@@ -258,14 +258,6 @@ module Yast
 
     # <!-- SuSEFirewall GLOBAL FUNCTIONS USED BY LOCAL ONES //-->
 
-    # Returns whether records in variable should be written one record on one line.
-    # @return [Boolean] if wolpr
-    def WriteOneRecordPerLine(key_name)
-      return true if key_name.nil? && key_name == ""
-
-      Builtins.contains(@one_line_per_record, key_name)
-    end
-
     # Function sets internal variable, which indicates, that any
     # "firewall settings were modified", to "true".
     def SetModified
@@ -427,9 +419,6 @@ module Yast
       Builtins.foreach(variables) do |variable|
         # if variable is undefined, get default value
         value = Ops.get_string(@SETTINGS, variable) { GetDefaultValue(variable) }
-        if WriteOneRecordPerLine(variable) == true
-          value = Builtins.mergestring(Builtins.splitstring(value, " "), "\n")
-        end
         write_status = SCR.Write(
           Builtins.add(path(".sysconfig.SuSEfirewall2"), variable),
           value
@@ -3762,7 +3751,6 @@ module Yast
     publish variable: :SuSEFirewall_variables, type: "list <string>", private: true
     publish variable: :one_line_per_record, type: "list <string>", private: true
     publish variable: :broadcast_related_module, type: "string", private: true
-    publish function: :WriteOneRecordPerLine, type: "boolean (string)", private: true
     publish function: :SetModified, type: "void ()"
     publish function: :ResetModified, type: "void ()"
     publish function: :GetKnownFirewallZones, type: "list <string> ()"
